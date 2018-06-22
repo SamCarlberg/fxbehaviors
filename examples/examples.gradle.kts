@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    project(":fxbehaviors")
+    compile(project(":fxbehaviors"))
 }

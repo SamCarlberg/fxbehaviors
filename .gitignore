@@ -2,5 +2,5 @@
 .gradle/
 
 *.class
-build/*
-out/*
+**/build/**
+**/out/**

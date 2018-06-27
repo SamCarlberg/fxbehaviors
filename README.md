@@ -1,5 +1,7 @@
 # FX Behaviors
 
+[ ![Download](https://api.bintray.com/packages/samcarlberg/maven-artifacts/fxbehaviors/images/download.svg) ](https://bintray.com/samcarlberg/maven-artifacts/fxbehaviors/_latestVersion)
+
 An alternative to JavaFX behavior classes that were placed in an internal module
 in Java 9 with no publicly accessible replacement. This is not a one-to-one
 replacement; the bindings API is more robust and functionally-focused;

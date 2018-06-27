@@ -4,9 +4,10 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Control;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.InputEvent;
 
 /**
  * Defines interactions with a control. Skins should use behaviors to manipulate the control rather than doing so
@@ -18,12 +19,15 @@ import javafx.scene.input.KeyEvent;
 public class BehaviorBase<C extends Control, B extends BehaviorBase<C, B>> {
 
   private C control;
-  private final Set<KeyBinding<B>> keyBindings;
+  private final Collection<Binding<?, B>> bindings;
 
-  private final EventHandler<KeyEvent> keyEventHandler = event -> {
+  private final EventHandler<Event> eventHandler = event -> {
     if (!event.isConsumed()) {
-      for (KeyBinding<B> binding : getKeyBindings()) {
-        binding.fireIfMatches(event, (B) this);
+      for (Binding<?, B> binding : getBindings()) {
+        if (binding.getEventType().equals(event.getEventType())) {
+          // The binding is guaranteed to match, so this raw cast is safe
+          ((Binding) binding).fireIfMatches(event, this);
+        }
       }
     }
   };
@@ -31,26 +35,21 @@ public class BehaviorBase<C extends Control, B extends BehaviorBase<C, B>> {
   /**
    * Creates a new behavior object.
    *
-   * @param control     the control to manipulate
-   * @param keyBindings optional key bindings
+   * @param control  the control to manipulate
+   * @param bindings optional input bindings
    */
-  public BehaviorBase(C control, Collection<KeyBinding<B>> keyBindings) {
+  public BehaviorBase(C control, Collection<? extends Binding<?, B>> bindings) {
     Objects.requireNonNull(control, "Control cannot be null");
     this.control = control;
-    this.keyBindings = keyBindings == null || keyBindings.isEmpty()
+    this.bindings = bindings == null || bindings.isEmpty()
         ? Set.of()
-        : Set.copyOf(keyBindings); // will check for null and duplicate elements
+        : Set.copyOf(bindings);
 
-    control.addEventHandler(KeyEvent.ANY, keyEventHandler);
+    control.addEventHandler(InputEvent.ANY, eventHandler);
   }
 
-  /**
-   * Gets the key bindings for this behavior. The returned set is unmodifiable.
-   *
-   * @return the set of key bindings for this behavior
-   */
-  public final Set<KeyBinding<B>> getKeyBindings() {
-    return keyBindings;
+  private Collection<Binding<?, B>> getBindings() {
+    return bindings;
   }
 
   /**
@@ -60,8 +59,11 @@ public class BehaviorBase<C extends Control, B extends BehaviorBase<C, B>> {
     return control;
   }
 
+  /**
+   * Disposes this behavior. Subclasses should be sure to call {@code super.dispose()} if this method is overridden.
+   */
   public void dispose() {
-    control.removeEventHandler(KeyEvent.ANY, keyEventHandler);
+    control.removeEventHandler(InputEvent.ANY, eventHandler);
     control = null;
   }
 

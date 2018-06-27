@@ -148,7 +148,7 @@ public class KeyBindingTest {
     assertFalse(fired.get(), "Binding should NOT have fired for event " + event);
   }
 
-  private static KeyEvent createKeyEvent(EventType<KeyEvent> type, KeyCode keyCode, KeyCombination.Modifier... modifiers) {
+  public static KeyEvent createKeyEvent(EventType<KeyEvent> type, KeyCode keyCode, KeyCombination.Modifier... modifiers) {
     Collection<KeyCombination.Modifier> mods = Set.of(modifiers);
     return new KeyEvent(
         KeyBindingTest.class,

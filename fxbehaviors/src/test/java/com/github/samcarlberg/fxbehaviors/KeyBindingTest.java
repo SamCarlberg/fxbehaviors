@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
@@ -15,6 +14,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 
+import static com.github.samcarlberg.fxbehaviors.Stubs.setOf;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -149,13 +149,13 @@ public class KeyBindingTest {
   }
 
   public static KeyEvent createKeyEvent(EventType<KeyEvent> type, KeyCode keyCode, KeyCombination.Modifier... modifiers) {
-    Collection<KeyCombination.Modifier> mods = Set.of(modifiers);
+    Collection<KeyCombination.Modifier> mods = setOf(modifiers);
     return new KeyEvent(
         KeyBindingTest.class,
         null,
         type,
-        keyCode.getChar(),
-        keyCode.getChar(),
+        keyCode.impl_getChar(),
+        keyCode.impl_getChar(),
         keyCode,
         mods.contains(KeyCombination.SHIFT_DOWN),
         mods.contains(KeyCombination.CONTROL_DOWN),

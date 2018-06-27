@@ -11,13 +11,15 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import static com.github.samcarlberg.fxbehaviors.Stubs.listOf;
+
 public final class MouseBinding<B extends BehaviorBase<?, B>> extends Binding<MouseEvent, B> {
 
   private final Collection<MouseInput> inputs;
 
   public MouseBinding(Collection<MouseInput> inputs, EventType<MouseEvent> eventType, Consumer<B> action) {
     super(eventType, action);
-    this.inputs = List.copyOf(inputs);
+    this.inputs = listOf(inputs);
   }
 
   @Override
@@ -40,7 +42,7 @@ public final class MouseBinding<B extends BehaviorBase<?, B>> extends Binding<Mo
   public static final class MouseBindingBuilder<B extends BehaviorBase<?, B>>
       extends Builder<MouseEvent, B, MouseBinding<B>> {
 
-    private static final Collection<MouseInput> DEFAULT_INPUTS = List.of(MouseInput.PRIMARY_BUTTON);
+    private static final Collection<MouseInput> DEFAULT_INPUTS = listOf(MouseInput.PRIMARY_BUTTON);
     private Collection<MouseInput> customInputs = null;
 
     MouseBindingBuilder() {

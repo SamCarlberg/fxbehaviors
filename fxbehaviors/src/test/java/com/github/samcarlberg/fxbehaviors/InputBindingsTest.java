@@ -2,13 +2,13 @@ package com.github.samcarlberg.fxbehaviors;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import static com.github.samcarlberg.fxbehaviors.Stubs.listOf;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class InputBindingsTest {
@@ -18,7 +18,7 @@ public class InputBindingsTest {
     final AtomicBoolean fired = new AtomicBoolean(false);
     final EventType<KeyEvent> eventType = KeyEvent.KEY_PRESSED;
     final KeyCode keyCode = KeyCode.A;
-    final InputBindings<?> bindings = InputBindings.of((e, b) -> false, List.of(
+    final InputBindings<?> bindings = InputBindings.of((e, b) -> false, listOf(
         KeyBinding.builder()
             .onEvent(eventType)
             .withKey(keyCode)

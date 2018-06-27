@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import static com.github.samcarlberg.fxbehaviors.Stubs.setOf;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,7 +37,7 @@ public class MouseBindingTest {
   }
 
   public static MouseEvent createMouseEvent(EventType<MouseEvent> eventType, MouseButton button, KeyCode... keys) {
-    Set<KeyCode> k = Set.of(keys);
+    Set<KeyCode> k = setOf(keys);
     return new MouseEvent(
         null, null,
         eventType,

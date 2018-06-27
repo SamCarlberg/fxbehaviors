@@ -12,6 +12,8 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 
+import static com.github.samcarlberg.fxbehaviors.Stubs.listOf;
+
 /**
  * Binds key inputs to actions to fire when a certain key event happens. {@link KeyEvent#KEY_TYPED KEY_TYPED} events are
  * not accepted, as they will match any key combinations. {@link KeyEvent#KEY_PRESSED}, {@link KeyEvent#KEY_RELEASED},
@@ -45,7 +47,7 @@ public final class KeyBinding<B extends BehaviorBase<?, B>> extends Binding<KeyE
       throw new IllegalArgumentException("KEY_TYPED events do not trigger key combinations");
     }
 
-    this.keyCombinations = List.copyOf(keyCombinations);
+    this.keyCombinations = listOf(keyCombinations);
   }
 
   @Override

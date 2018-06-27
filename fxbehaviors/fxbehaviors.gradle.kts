@@ -74,7 +74,7 @@ afterEvaluate {
             create<MavenPublication>(publicationName) {
                 groupId = "com.github.samcarlberg"
                 artifactId = "fxbehaviors"
-                version = project.version as String
+                version = "${project.version}-java8"
                 val jar: Jar by tasks
                 artifact(jar)
                 artifact(sourceJar)

@@ -1,10 +1,14 @@
 package com.github.samcarlberg.fxbehaviors;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
 import javafx.event.Event;
+
+import static com.github.samcarlberg.fxbehaviors.Stubs.listOf;
 
 public final class InputBindings<B extends BehaviorBase<?, B>> {
 
@@ -27,7 +31,7 @@ public final class InputBindings<B extends BehaviorBase<?, B>> {
    */
   @SafeVarargs
   public static <B extends BehaviorBase<?, B>> InputBindings<B> of(Binding<?, B>... bindings) {
-    return new InputBindings<>(Set.of(bindings));
+    return new InputBindings<>(listOf(bindings));
   }
 
 
@@ -54,7 +58,7 @@ public final class InputBindings<B extends BehaviorBase<?, B>> {
   @SafeVarargs
   public static <B extends BehaviorBase<?, B>> InputBindings<B> of(BiPredicate<? super Event, B> filter,
                                                                    Binding<?, B>... bindings) {
-    return new InputBindings<>(filter, Set.of(bindings));
+    return new InputBindings<>(filter, Arrays.asList(bindings));
   }
 
   private InputBindings(Collection<? extends Binding<?, B>> bindings) {
@@ -63,7 +67,7 @@ public final class InputBindings<B extends BehaviorBase<?, B>> {
 
   private InputBindings(BiPredicate<? super Event, B> filter, Collection<? extends Binding<?, B>> bindings) {
     this.filter = filter;
-    this.bindings = Set.copyOf(bindings);
+    this.bindings = new HashSet<>(bindings);
   }
 
   /**

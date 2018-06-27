@@ -8,6 +8,14 @@ replacement; the bindings API is more robust and functionally-focused;
 actions are specified by lambda expressions or method references instead of
 magic strings which API consumers must provide and `switch` on.
 
+## Improvements vs JavaFX API
+
+- No magic strings!
+  - Typos are compile-time exceptions, not runtime headaches
+- Easier to define multiple inputs for single actions
+  - e.g. define multiple sets of key presses that result in the same action
+- Builder pattern for creating bindings instead of weird with-ers (`.alt()`, `.shift()`, etc)
+
 ## Defining Custom Behaviors
 
 ### Old

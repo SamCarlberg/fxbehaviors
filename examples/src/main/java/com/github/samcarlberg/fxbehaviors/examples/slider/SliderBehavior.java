@@ -1,9 +1,8 @@
 package com.github.samcarlberg.fxbehaviors.examples.slider;
 
 import com.github.samcarlberg.fxbehaviors.BehaviorBase;
+import com.github.samcarlberg.fxbehaviors.InputBindings;
 import com.github.samcarlberg.fxbehaviors.KeyBinding;
-
-import java.util.List;
 
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
@@ -44,7 +43,12 @@ public class SliderBehavior extends BehaviorBase<Slider, SliderBehavior> {
       .withAction(SliderBehavior::goToEnd)
       .build();
 
-  private static final List<KeyBinding<SliderBehavior>> keyBindings = List.of(decrement, increment, toStart, toEnd);
+  private static final InputBindings<SliderBehavior> keyBindings = InputBindings.of(
+      decrement,
+      increment,
+      toStart,
+      toEnd
+  );
 
   public SliderBehavior(Slider control) {
     super(control, keyBindings);

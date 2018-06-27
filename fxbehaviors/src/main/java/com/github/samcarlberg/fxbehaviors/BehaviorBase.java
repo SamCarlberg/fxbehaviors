@@ -1,8 +1,6 @@
 package com.github.samcarlberg.fxbehaviors;
 
-import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -19,18 +17,9 @@ import javafx.scene.input.InputEvent;
 public class BehaviorBase<C extends Control, B extends BehaviorBase<C, B>> {
 
   private C control;
-  private final Collection<Binding<?, B>> bindings;
+  private InputBindings<B> inputBindings;
 
-  private final EventHandler<Event> eventHandler = event -> {
-    if (!event.isConsumed()) {
-      for (Binding<?, B> binding : getBindings()) {
-        if (binding.getEventType().equals(event.getEventType())) {
-          // The binding is guaranteed to match, so this raw cast is safe
-          ((Binding) binding).fireIfMatches(event, this);
-        }
-      }
-    }
-  };
+  private final EventHandler<Event> eventHandler = this::fireBindings;
 
   /**
    * Creates a new behavior object.
@@ -38,18 +27,12 @@ public class BehaviorBase<C extends Control, B extends BehaviorBase<C, B>> {
    * @param control  the control to manipulate
    * @param bindings optional input bindings
    */
-  public BehaviorBase(C control, Collection<? extends Binding<?, B>> bindings) {
+  public BehaviorBase(C control, InputBindings<B> bindings) {
     Objects.requireNonNull(control, "Control cannot be null");
     this.control = control;
-    this.bindings = bindings == null || bindings.isEmpty()
-        ? Set.of()
-        : Set.copyOf(bindings);
+    this.inputBindings = bindings;
 
     control.addEventHandler(InputEvent.ANY, eventHandler);
-  }
-
-  private Collection<Binding<?, B>> getBindings() {
-    return bindings;
   }
 
   /**
@@ -67,4 +50,9 @@ public class BehaviorBase<C extends Control, B extends BehaviorBase<C, B>> {
     control = null;
   }
 
+  private void fireBindings(Event event) {
+    if (!event.isConsumed() && inputBindings != null) {
+      inputBindings.fire(event, (B) this);
+    }
+  }
 }

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.application.Application;
@@ -37,19 +36,27 @@ public class BehaviorBaseTest {
     }
   }
 
+  private static class MockButtonBehavior extends BehaviorBase<Button, MockButtonBehavior> {
+    public MockButtonBehavior(Button control, InputBindings<MockButtonBehavior> bindings) {
+      super(control, bindings);
+    }
+  }
+
   @Test
   public void testEvents() {
     AtomicBoolean keyFired = new AtomicBoolean(false);
     AtomicBoolean mouseFired = new AtomicBoolean(false);
-    BehaviorBase<Button, ?> behavior = new BehaviorBase(new Button(),
-        Set.of(
-            KeyBinding.builder()
+    MockButtonBehavior behavior = new MockButtonBehavior(
+        new Button(),
+        InputBindings.of(
+            KeyBinding.<MockButtonBehavior>builder()
                 .withAction(it -> keyFired.set(true))
                 .build(),
-            MouseBinding.builder()
+            MouseBinding.<MockButtonBehavior>builder()
                 .withAction(it -> mouseFired.set(true))
                 .build()
-        ));
+        )
+    );
 
     behavior.getControl().fireEvent(createKeyEvent(KeyEvent.KEY_PRESSED, KeyCode.A));
     assertAll("Only the key binding should have fired",

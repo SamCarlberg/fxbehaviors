@@ -2,7 +2,7 @@
 
 An alternative to JavaFX behavior classes that were placed in an internal module
 in Java 9 with no publicly accessible replacement. This is not a one-to-one
-replacement; the key bindings API is more robust and functionally-focused;
+replacement; the bindings API is more robust and functionally-focused;
 actions are specified by lambda expressions or method references instead of
 magic strings which API consumers must provide and `switch` on.
 
@@ -42,6 +42,7 @@ public class OldBehavior extends BehaviorBase<Control> {
 ### New
 ```java
 import com.github.samcarlberg.fxbehaviors.BehaviorBase;
+import com.github.samcarlberg.fxbehaviors.InputBindings;
 import com.github.samcarlberg.fxbehaviors.KeyBinding;
 
 public class NewBehavior extends BehaviorBase<Control, NewBehavior> {
@@ -52,7 +53,7 @@ public class NewBehavior extends BehaviorBase<Control, NewBehavior> {
     .build();
   
   public NewBehavior(Control control) {
-    super(control, List.of(doActionOnSpace));
+    super(control, InputBindings.of(doActionOnSpace));
   }
   
   public void doAction() {

@@ -1,11 +1,9 @@
 package com.github.samcarlberg.fxbehaviors.examples.button;
 
 import com.github.samcarlberg.fxbehaviors.BehaviorBase;
-import com.github.samcarlberg.fxbehaviors.Binding;
+import com.github.samcarlberg.fxbehaviors.InputBindings;
 import com.github.samcarlberg.fxbehaviors.KeyBinding;
 import com.github.samcarlberg.fxbehaviors.MouseBinding;
-
-import java.util.List;
 
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -40,7 +38,7 @@ public class ButtonBehavior extends BehaviorBase<Button, ButtonBehavior> {
       .withAction(ButtonBehavior::fireIfArmed)
       .build();
 
-  private static final List<Binding<?, ButtonBehavior>> bindings = List.of(
+  private static final InputBindings<ButtonBehavior> bindings = InputBindings.of(
       armOnSpacePressed,
       fireOnSpaceReleased,
       armOnMousePressed,

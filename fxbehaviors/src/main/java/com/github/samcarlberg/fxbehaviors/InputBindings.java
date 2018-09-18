@@ -6,18 +6,15 @@ import java.util.function.BiPredicate;
 
 import javafx.event.Event;
 
-public final class InputBindings<B extends BehaviorBase<?, B>> {
-
-  private final BiPredicate<? super Event, B> filter;
-  private final Set<Binding<?, B>> bindings;
+public interface InputBindings<B extends BehaviorBase<?, B>> {
 
   /**
    * Creates a new set of input bindings with no filter.
    *
    * @param bindings the bindings
    */
-  public static <B extends BehaviorBase<?, B>> InputBindings<B> of(Collection<? extends Binding<?, B>> bindings) {
-    return new InputBindings<>(bindings);
+  static <B extends BehaviorBase<?, B>> InputBindings<B> of(Collection<? extends Binding<?, B>> bindings) {
+    return new DefaultInputBindings<>(bindings);
   }
 
   /**
@@ -26,8 +23,8 @@ public final class InputBindings<B extends BehaviorBase<?, B>> {
    * @param bindings the bindings
    */
   @SafeVarargs
-  public static <B extends BehaviorBase<?, B>> InputBindings<B> of(Binding<?, B>... bindings) {
-    return new InputBindings<>(Set.of(bindings));
+  static <B extends BehaviorBase<?, B>> InputBindings<B> of(Binding<?, B>... bindings) {
+    return new DefaultInputBindings<>(Set.of(bindings));
   }
 
 
@@ -38,9 +35,9 @@ public final class InputBindings<B extends BehaviorBase<?, B>> {
    *                 fire even if they match that event
    * @param bindings the bindings
    */
-  public static <B extends BehaviorBase<?, B>> InputBindings<B> of(BiPredicate<? super Event, B> filter,
-                                                                   Collection<? extends Binding<?, B>> bindings) {
-    return new InputBindings<>(filter, bindings);
+  static <B extends BehaviorBase<?, B>> InputBindings<B> of(BiPredicate<? super Event, B> filter,
+                                                            Collection<? extends Binding<?, B>> bindings) {
+    return new DefaultInputBindings<>(filter, bindings);
   }
 
 
@@ -52,32 +49,30 @@ public final class InputBindings<B extends BehaviorBase<?, B>> {
    * @param bindings the bindings
    */
   @SafeVarargs
-  public static <B extends BehaviorBase<?, B>> InputBindings<B> of(BiPredicate<? super Event, B> filter,
-                                                                   Binding<?, B>... bindings) {
-    return new InputBindings<>(filter, Set.of(bindings));
-  }
-
-  private InputBindings(Collection<? extends Binding<?, B>> bindings) {
-    this((e, b) -> true, bindings);
-  }
-
-  private InputBindings(BiPredicate<? super Event, B> filter, Collection<? extends Binding<?, B>> bindings) {
-    this.filter = filter;
-    this.bindings = Set.copyOf(bindings);
+  static <B extends BehaviorBase<?, B>> InputBindings<B> of(BiPredicate<? super Event, B> filter,
+                                                            Binding<?, B>... bindings) {
+    return new DefaultInputBindings<>(filter, Set.of(bindings));
   }
 
   /**
-   * Fires the bindings in response to an event if the filter is passed.
+   * Combines multiple input bindings.
+   *
+   * @param first  the first set of bindings
+   * @param second the second set of bindings
+   * @param more   optional, extra bindings to combine
+   */
+  static <B extends BehaviorBase<?, B>> InputBindings<B> combine(InputBindings<B> first,
+                                                                 InputBindings<B> second,
+                                                                 InputBindings<B>... more) {
+    return new CombinedInputBindings<>(first, second, more);
+  }
+
+  /**
+   * Fires the bindings in response to an event.
    *
    * @param event    the event that was fired
    * @param behavior the behavior on which to fire the bindings
    */
-  public void fire(Event event, B behavior) {
-    if (filter.test(event, behavior)) {
-      bindings.stream()
-          .filter(b -> b.getEventType().equals(event.getEventType()))
-          .forEach(b -> ((Binding<Event, B>) b).fireIfMatches(event, behavior)); // Guaranteed to match, so cast is okay
-    }
-  }
+  void fire(Event event, B behavior);
 
 }

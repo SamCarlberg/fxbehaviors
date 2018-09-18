@@ -35,6 +35,10 @@ dependencies {
     testRuntime(create(group = "org.junit.platform", name = "junit-platform-launcher", version = "1.0.0"))
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 // Publishing
 
 val PUBLISHED_CONFIGURATION_NAME = "published"

@@ -1,3 +1,5 @@
+**This project has moved to be part of [wpilibsuite/desktop-common](https://github.com/wpilibsuite/desktop-common)**
+
 # FX Behaviors
 
 [ ![Download](https://api.bintray.com/packages/samcarlberg/maven-artifacts/fxbehaviors/images/download.svg) ](https://bintray.com/samcarlberg/maven-artifacts/fxbehaviors/_latestVersion)
